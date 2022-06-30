@@ -1,0 +1,75 @@
+{% extends "base_generic.html" %}
+{% block title %}
+  <h1 class="mt-4">Items</h1>
+{% endblock %}
+{% block content %}
+  <div class="card mb-4">
+    <div class="card-header">
+      Item counts
+    </div>
+    <div class="card-body">
+      References :
+      <ul>
+        <li>Books : <b>{{ num_books }}</b></li>
+        <li>CDs: <b>{{ num_cds }}</b></li>
+        <li>DVDs : <b>{{ num_dvds }}</b></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <div class=" d-flex justify-content-between">
+        <h4> Items table </h4>
+        <a class="btn btn-primary text-decoration-none" href="{% url "item-create" %}" role="button">
+          <i class="fas fa-plus me-1"></i>
+          Add a new item
+        </a>
+      </div>
+    </div>
+    <div class="card-body">
+      <table id="itemstable">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Author(s)</th>
+          <th>Type</th>
+          <th>Genre</th>
+          <th>Total copies</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <th>Name</th>
+          <th>Author(s)</th>
+          <th>Type</th>
+          <th>Genre</th>
+          <th>Total copies</th>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for item, i in items %}
+          <tr>
+            <td><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></td>
+            <td>{{ i.get_authors }}</td>
+            <td>
+              {% if item.type == "cd" %}
+                <i class="fas fa-compact-disc me-1"></i>
+              {% elif item.type == "book" %}
+                <i class="fas fa-book me-1"></i>
+              {% elif item.type == "dvd" %}
+                <i class="fas fa-film me-1"></i>
+              {% endif %}
+              {{ item.type }}
+            </td>
+            <td>{{ i.get_genres }}
+            </td>
+            <td>{{ i.iteminstance_set.count }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+{% endblock %}

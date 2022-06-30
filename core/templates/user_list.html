@@ -1,0 +1,49 @@
+{% extends "base_generic.html" %}
+{% block title %}
+  <h1 class="mt-4">Users</h1>
+{% endblock %}
+{% load custom_filters %}
+{% block content %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Users table
+    </div>
+    <div class="card-body">
+      <table id="itemstable">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Situation</th>
+          <th>borrowed items</th>
+          <th>Subscription end date</th>
+          <th>banned until</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Situation</th>
+          <th>borrowed items</th>
+          <th>Subscription end date</th>
+          <th>banned until</th>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for user in users %}
+          <tr>
+            <td><a href="{% url 'user-detail' user.id %}">{{ user }}</a></td>
+            <td>{{ user.email }}</td>
+            <td>{{ situations|get_item:user.situation_id }}</td>
+            <td>{{ n_borrowed_items|get_item:user.id }}</td>
+            <td>{{ user.subscription_end_date }}</td>
+            <td>{{ user.banned_until }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

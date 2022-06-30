@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% block title %}
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="card mb-4 mt-4">
+    <div class="card-header">
+      <h4>Update {{ object }}</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">{% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Update">
+      </form>
+    </div>
+  </div>
+{% endblock content %}

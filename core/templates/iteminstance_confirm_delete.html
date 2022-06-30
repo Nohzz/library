@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <div class="card mb-4 mt-4">
+    <div class="card-header">
+      Are you sure you want to delete "{{ object }}"?
+    </div>
+    <div class="card-body">
+      <form method="post">{% csrf_token %}
+
+        <a href="{{ success_url }}" class="btn btn-outline-secondary">Cancel</a>
+        <input class="btn btn-danger " type="submit" name="cancel" value="Delete"/>
+      </form>
+    </div>
+  </div>
+{% endblock %}

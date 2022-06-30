@@ -1,0 +1,122 @@
+{% extends "base_generic.html" %}
+{% load tz %}
+{% load custom_filters %}
+{% block title %}
+{% endblock %}
+{% block content %}
+  <div class="card mb-4 mt-4">
+    <div class="card-header">
+      <h2>{{ user }}</h2>
+    </div>
+    <div class="card-body d-flex justify-content-between">
+      <ul>
+        <li>
+          <b>Email</b> : {{ user.email }}
+        </li>
+        <li>
+          <b>Situation</b> : {{ user.situation }}
+        </li>
+        <li><b>Subscription end date </b> : {{ user.subscription_end_date }}</li>
+      </ul>
+      <div class="card">
+        <div class="card-header">total overdue fees (not payed)</div>
+        <div class="card-body">{{ t_overdue_fees }} €</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+      <h4> Items Borrowed</h4>
+    </div>
+    <div class="card-body">
+      <table id="itemstable">
+        <thead>
+        <tr>
+          <th>item_id</th>
+          <th>Borrowed</th>
+          <th>Due date</th>
+          <th>Overdue</th>
+          <th>See detail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for borrowing in active_borrowings %}
+          <tr>
+            <td>
+              {% if borrowing.item_id %}
+                <a href="{% url 'iteminstance-detail' borrowing.item_id %}">{{ titles|get_item:borrowing.item_id }}</a>
+              {% else %}
+                {{ titles|get_item:borrowing.item_id }}
+              {% endif %}
+            </td>
+            <td>{{ borrowing.borrowed }}</td>
+            <td>{{ borrowing.due_date }}</td>
+            <td>
+              {% if borrowing.overdue_fee != 0 %}
+                <i class="fas fa-exclamation-triangle me-1">
+                </i>{{ borrowing.overdue_fee_payed|yesno:"(payed),(not payed)" }}
+              {% endif %}
+            </td>
+            <td>
+              <a
+                      class="btn-sm btn-primary text-decoration-none"
+                      href="{% url "borrowing-detail" borrowing.id %}"><i
+                      class="fas fa-edit"></i>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between">
+      <h4> Returned items</h4>
+    </div>
+    <div class="card-body">
+      <table id="datatablesSimple">
+        <thead>
+        <tr>
+          <th>item_id</th>
+          <th>Borrowed</th>
+          <th>Due date</th>
+          <th>Returned</th>
+          <th>Overdue</th>
+          <th>See detail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for borrowing in returned %}
+          <tr>
+            <td>
+              {% if borrowing.item_id %}
+                <a href="{% url 'iteminstance-detail' borrowing.item_id %}">{{ titles|get_item:borrowing.item_id }}</a>
+              {% else %}
+                {{ titles|get_item:borrowing.item_id }}
+              {% endif %}
+            </td>
+            <td>{{ borrowing.borrowed }}</td>
+            <td>{{ borrowing.due_date }}</td>
+            <td>{{ borrowing.returned }}</td>
+            <td>
+              {% if borrowing.overdue_fee != 0 %}
+                <i class="fas fa-exclamation-triangle me-1">
+                </i>{{ borrowing.overdue_fee_payed|yesno:"(payed),(not payed)" }}
+              {% endif %}
+            </td>
+            <td>
+              <a
+                      class="btn-sm btn-primary text-decoration-none"
+                      href="{% url "borrowing-detail" borrowing.id %}"><i
+                      class="fas fa-edit"></i>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base_generic.html" %}
+{% block title %}
+{% endblock %}
+{% block content %}
+  <div class="card mb-4 mt-4">
+    <div class="card-header">
+      <h2>{{ item }}{{ borrowing.item }}</h2>
+      {% if borrowing.item.type == "cd" %}
+        <i class="fas fa-compact-disc me-1"></i>
+      {% elif borrowing.item.type == "book" %}
+        <i class="fas fa-book me-1"></i>
+      {% elif borrowing.item.type == "dvd" %}
+        <i class="fas fa-film me-1"></i>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <table class="table table-responsive">
+        <thead>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th scope="row">Borrower</th>
+          <td>{{ borrowing.borrower }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row">Borrowed date</th>
+          <td>{{ borrowing.borrowed }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th scope="row">Due date</th>
+          <td>
+            {{ borrowing.due_date }}
+          </td>
+          <td>
+            {% if not borrowing.returned %}
+              <a class="btn-sm btn-primary text-decoration-none" href="{% url 'borrowing-extend' borrowing.id %}">
+                Extend 1 week</a>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Returned</th>
+          <td>{% if borrowing.returned %}
+            {{ borrowing.returned }}
+          {% else %}
+            No
+          {% endif %} </td>
+          <td>{% if not borrowing.returned %}
+            <a class="btn-sm btn-primary text-decoration-none" href="{% url 'borrowing-returned' borrowing.id %}">
+              Mark as returned</a>
+          {% endif %} </td>
+        </tr>
+        <tr>
+          <th scope="row">Overdue fee</th>
+          <td>{{ borrowing.overdue_fee }} € {{ borrowing.overdue_fee_payed|yesno:"(payed),(not payed)" }}</td>
+          <td>{% if not borrowing.overdue_fee_payed and borrowing.overdue_fee != 0 %}
+            <a class="btn-sm btn-primary text-decoration-none" href="{% url 'borrowing-pay' borrowing.id %}">Mark as payed (must be returned)</a>
+          {% endif %} </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+{% endblock %}
